@@ -104,4 +104,22 @@ class MemoryCollectionTest extends TestCase
 
         $this->assertTrue($collection->has('index'));
     }
+
+    /**
+     * @test
+     * @depends dataCanBeAdded
+     */
+    public function dataCanBeRetrievedWithGetAll()
+    {
+        $collection = new MemoryCollection();
+        $collection->set('index1', 'value');
+        $collection->set('index2', 5);
+        $collection->set('index3', true);
+
+        $array = $collection->getAll();
+
+        $this->assertEquals($array['index1'], 'value');
+        $this->assertEquals($array['index2'], 5);
+        $this->assertEquals($array['index3'], true);
+    }
 }

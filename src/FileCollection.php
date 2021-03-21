@@ -80,6 +80,7 @@ class FileCollection implements CollectionInterface
      */
     public function has(string $index)
     {
+        return $this->fileContents->has($index);
     }
 
     /**
@@ -87,6 +88,7 @@ class FileCollection implements CollectionInterface
      */
     public function count():int
     {
+        return $this->fileContents->count();
     }
 
     /**
@@ -94,6 +96,9 @@ class FileCollection implements CollectionInterface
      */
     public function clean()
     {
+        file_put_contents($this->fileName, "");
+
+        $this->fileContents->clean();
     }
 
     public function isFileAllowed()

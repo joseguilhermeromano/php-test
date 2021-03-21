@@ -54,4 +54,54 @@ class FileCollectionTest extends TestCase
         $this->assertNull($fileCollection->get('index1'));
         $this->assertEquals('defaultValue', $fileCollection->get('index1', 'defaultValue'));
     }
+
+    /**
+     * @test
+     * @depends objectCanBeConstructed
+     */
+    public function newCollectionShouldNotContainItems()
+    {
+        $fileCollection = new FileCollection();
+        $this->assertEquals(0, $fileCollection->count());
+    }
+
+    /**
+     * @test
+     * @depends dataCanBeAdded
+     */
+    public function collectionWithItemsShouldReturnValidCount()
+    {
+        $fileCollection = new FileCollection();
+        $fileCollection->set('index1', 'value');
+        $fileCollection->set('index2', 5);
+        $fileCollection->set('index3', true);
+
+        $this->assertEquals(3, $fileCollection->count());
+    }
+
+    /**
+     * @test
+     * @depends collectionWithItemsShouldReturnValidCount
+     */
+    public function collectionCanBeCleaned()
+    {
+        $fileCollection = new FileCollection();
+        $fileCollection->set('index', 'value');
+        $this->assertEquals(1, $fileCollection->count());
+
+        $fileCollection->clean();
+        $this->assertEquals(0, $fileCollection->count());
+    }
+
+    /**
+     * @test
+     * @depends dataCanBeAdded
+     */
+    public function addedItemShouldExistInCollection()
+    {
+        $fileCollection = new FileCollection();
+        $fileCollection->set('index', 'value');
+
+        $this->assertTrue($fileCollection->has('index'));
+    }
 }
