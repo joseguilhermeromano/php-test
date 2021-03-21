@@ -18,7 +18,7 @@ class FileCollection implements CollectionInterface
     protected static $extAlloweds = array('json');
     private $fileName;
     private $ext;
-    private $fileContents; 
+    private $fileContents;
 
     /**
      * Constructor
@@ -34,7 +34,7 @@ class FileCollection implements CollectionInterface
         if (!file_exists($this->fileName)) {
             $path = self::$path;
 
-            if (!is_dir($path)){
+            if (!is_dir($path)) {
                 mkdir($path, 0755);
             }
             
@@ -42,7 +42,9 @@ class FileCollection implements CollectionInterface
             fclose($newFile);
         }
 
-        if (empty($this->fileContents)) $this->setFileContents();
+        if (empty($this->fileContents)) {
+            $this->setFileContents();
+        }
     }
 
     /**
@@ -50,7 +52,9 @@ class FileCollection implements CollectionInterface
      */
     public function get(string $index, $defaultValue = null)
     {
-        if (empty($this->fileContents)) $this->setFileContents();
+        if (empty($this->fileContents)) {
+            $this->setFileContents();
+        }
 
         return $this->fileContents->get($index, $defaultValue);
     }
@@ -109,14 +113,14 @@ class FileCollection implements CollectionInterface
         return (json_last_error() == JSON_ERROR_NONE);
     }
 
-    public function setFileContents(){
+    public function setFileContents()
+    {
 
         $collection = new MemoryCollection();
         
         $content = file_get_contents($this->fileName);
 
         if (!empty($content)) {
-
             if (!$this->isJsonValid($content)) {
                 $fileName = basename($this->fileName);
                 throw new \Exception("The content of the file '{$fileName}' is invalid.");
@@ -132,7 +136,10 @@ class FileCollection implements CollectionInterface
         $this->fileContents = $collection;
     }
 
-    public function __destruct(){
-        unlink($this->fileName);
+    public function __destruct()
+    {
+        if (file_exists($this->fileName)) {
+            unlink($this->fileName);
+        }
     }
 }
