@@ -15,13 +15,40 @@ class FileCollection implements CollectionInterface
      * @var string
      */
     protected static $path = "src/out_files/";
+
+    /**
+     * Array of extensions permitted
+     *
+     * @var array
+     */
     protected static $extAlloweds = array('json');
+
+    /**
+     * Full path with name and extension of file
+     *
+     * @var string
+     */
     private $fileName;
+
+    /**
+     * Extension file
+     *
+     * @var string
+     */
     private $ext;
+
+    /**
+     * collection data of data.json file
+     *
+     * @var MemoryCollection
+     */
     private $fileContents;
 
     /**
      * Constructor
+     *
+     * @param mixed $fileName
+     * @return void
      */
     public function __construct(?string $fileName = "data.json")
     {
@@ -101,6 +128,11 @@ class FileCollection implements CollectionInterface
         $this->fileContents->clean();
     }
 
+    /**
+     * Check if file extension is allowed
+     *
+     * @return boolean
+     */
     public function isFileAllowed()
     {
         $this->ext = pathinfo($this->fileName, PATHINFO_EXTENSION);
@@ -112,12 +144,23 @@ class FileCollection implements CollectionInterface
         return true;
     }
 
+    /**
+     * Check the format valid of Json
+     *
+     * @param string
+     * @return boolean
+     */
     public function isJsonValid($string)
     {
         json_decode($string);
         return (json_last_error() == JSON_ERROR_NONE);
     }
 
+    /**
+     * Set contents in object of type MemoryCollection
+     *
+     * @return void
+     */
     public function setFileContents()
     {
 
@@ -141,6 +184,11 @@ class FileCollection implements CollectionInterface
         $this->fileContents = $collection;
     }
 
+    /**
+     * Destruct file data.json
+     *
+     * @return void
+     */
     public function __destruct()
     {
         if (file_exists($this->fileName)) {
