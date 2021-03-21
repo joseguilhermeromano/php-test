@@ -67,4 +67,9 @@ class MemoryCollection implements CollectionInterface
     {
         $this->data = [];
     }
+
+    public function getAll()
+    {
+        return $this->data;
+    }
 }
