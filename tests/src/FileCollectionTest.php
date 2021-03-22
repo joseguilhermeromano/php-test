@@ -107,4 +107,74 @@ class FileCollectionTest extends TestCase
 
         $this->assertTrue($fileCollection->has('index'));
     }
+
+    /**
+     * @test
+     * @depends objectCanBeConstructed
+     */
+    public function checkIfIsFileAllowedShouldReturnTrue()
+    {
+        $fileCollection = new FileCollection();
+        $return = $fileCollection->isFileAllowed();
+        $this->assertTrue($return);
+    }
+
+    /**
+     * @test
+     * @depends objectCanBeConstructed
+     */
+    public function checkIfIsFileAllowedShouldReturnException()
+    {
+        $this->expectException(\Exception::class);
+        $fileCollection = new FileCollection("data.txt");
+        $this->expectExceptionMessage('txt is not a allowed extension.');
+    }
+
+    /**
+     * @test
+     * @depends objectCanBeConstructed
+     */
+    public function checkIsJsonValidShouldReturnTrue()
+    {
+        $fileCollection = new FileCollection();
+        $json = array(1, 2, 3);
+        $return = $fileCollection->isJsonValid(json_encode($json));
+        $this->assertTrue($return);
+    }
+
+    /**
+     * @test
+     * @depends objectCanBeConstructed
+     */
+    public function checkIsJsonValidShouldReturnFalse()
+    {
+        $fileCollection = new FileCollection();
+        $json = '{"teste:{1,2,3}}';
+        $return = $fileCollection->isJsonValid($json);
+        $this->assertFalse($return);
+    }
+
+    /**
+     * @test
+     * @depends objectCanBeConstructed
+     */
+    public function checkSetFileContents()
+    {
+        $value1 = array("value" => "value1", "expirationTime" => 0);
+        $value2 = array("value" => "value2", "expirationTime" => 0);
+        $value3 = array("value" => "value3", "expirationTime" => 0);
+        $data = array("index1" => $value1, "index2" => $value2, "index3" => $value3);
+        $path = "src/out_files/";
+        $fileName= "data.json";
+        $jsonData = json_encode($data, JSON_PRETTY_PRINT);
+
+        if (!is_dir($path)) {
+            mkdir($path);
+        }
+        
+        file_put_contents($path.$fileName, $jsonData);
+        
+        $fileCollection = new FileCollection($fileName);
+        $this->assertEquals('value2', $fileCollection->get('index2'));
+    }
 }

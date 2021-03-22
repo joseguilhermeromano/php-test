@@ -128,9 +128,9 @@ class FileCollection implements CollectionInterface
     /**
      * Check if file extension is allowed
      *
-     * @return boolean
+     * @return bool
      */
-    public function isFileAllowed()
+    public function isFileAllowed():bool
     {
         $this->ext = pathinfo($this->fileName, PATHINFO_EXTENSION);
 
@@ -145,9 +145,9 @@ class FileCollection implements CollectionInterface
      * Check the format valid of Json
      *
      * @param string
-     * @return boolean
+     * @return bool
      */
-    public function isJsonValid($string)
+    public function isJsonValid(string $string):bool
     {
         json_decode($string);
         return (json_last_error() == JSON_ERROR_NONE);
