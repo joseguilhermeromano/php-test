@@ -145,25 +145,25 @@ class FileCollection implements CollectionInterface
      */
     public function setFileContents()
     {
-        if (!file_exists($this->fileName)) {
-            file_put_contents($this->fileName);
-        }
-
         $collection = new MemoryCollection();
-        
-        $content = file_get_contents($this->fileName);
 
-        if (!empty($content)) {
-            if (!$this->isJsonValid($content)) {
-                $fileName = basename($this->fileName);
-                throw new \Exception("The content of the file '{$fileName}' is invalid.");
+        if (file_exists($this->fileName)) {
+            $content = file_get_contents($this->fileName);
+
+            if (!empty($content)) {
+                if (!$this->isJsonValid($content)) {
+                    $fileName = basename($this->fileName);
+                    throw new \Exception("The content of the file '{$fileName}' is invalid.");
+                }
+
+                $content = json_decode($content, true);
+
+                foreach ($content as $key => $values) {
+                    $collection->set($key, $values["value"]);
+                }
             }
-
-            $content = json_decode($content, true);
-
-            foreach ($content as $key => $values) {
-                $collection->set($key, $values["value"]);
-            }
+        } else {
+            file_put_contents($this->fileName);
         }
 
         $this->fileContents = $collection;
