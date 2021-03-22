@@ -58,15 +58,6 @@ class FileCollection implements CollectionInterface
             throw new \Exception("{$this->ext} is not a allowed extension.");
         }
 
-        if (!file_exists($this->fileName)) {
-            $path = self::$path;
-            if (!is_dir($path)) {
-                mkdir($path, 0755);
-            }
-            $newFile = fopen($this->fileName, "w+");
-            fclose($newFile);
-        }
-
         if (empty($this->fileContents)) {
             $this->setFileContents();
         }
@@ -87,14 +78,10 @@ class FileCollection implements CollectionInterface
     {
         $this->fileContents->set($index, $value, $expirationTime);
         $collection = $this->fileContents->getAll();
-
         $json = json_encode($collection, JSON_PRETTY_PRINT);
-
-        if (!$this->isJsonValid($json)) {
-            throw new \Exception("The content of the file '{$fileName}' is invalid.");
+        if ($this->isJsonValid($json)) {
+            file_put_contents($this->fileName, $json);
         }
-
-        file_put_contents($this->fileName, $json);
     }
 
     /**
@@ -158,6 +145,16 @@ class FileCollection implements CollectionInterface
      */
     public function setFileContents()
     {
+        $path = self::$path;
+
+        if (!is_dir($path)) {
+            mkdir($path, 0755);
+        }
+
+        if (!file_exists($this->fileName)) {
+            $newFile = fopen($this->fileName, "w+");
+            fclose($newFile);
+        }
 
         $collection = new MemoryCollection();
         
