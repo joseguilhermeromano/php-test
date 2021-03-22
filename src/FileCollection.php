@@ -146,9 +146,7 @@ class FileCollection implements CollectionInterface
     public function setFileContents()
     {
         if (!file_exists($this->fileName)) {
-            $path = self::$path;
-            mkdir($path, 0755);
-            file_put_contents($this->fileName, "");
+            file_put_contents($this->fileName, "{}");
         }
 
         $collection = new MemoryCollection();
