@@ -1,7 +1,7 @@
 {
     "index1": {
-        "value": "value1",
-        "expirationTime": 0
+        "value": "value",
+        "expirationTime": 5
     },
     "index2": {
         "value": "value2",

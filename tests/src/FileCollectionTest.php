@@ -177,4 +177,17 @@ class FileCollectionTest extends TestCase
         $fileCollection = new FileCollection($fileName);
         $this->assertEquals('value2', $fileCollection->get('index2'));
     }
+
+    /**
+     * @test
+     * @depends objectCanBeConstructed
+     */
+    public function expiredIndexShouldReturnNull()
+    {
+        $fileCollection = new FileCollection();
+        $fileCollection->set('index1', 'value', 5);
+        sleep(10);
+        $return = $fileCollection->get('index1');
+        $this->assertNull($return);
+    }
 }
