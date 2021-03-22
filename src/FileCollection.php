@@ -60,11 +60,9 @@ class FileCollection implements CollectionInterface
 
         if (!file_exists($this->fileName)) {
             $path = self::$path;
-
             if (!is_dir($path)) {
                 mkdir($path, 0755);
             }
-            
             $newFile = fopen($this->fileName, "w+");
             fclose($newFile);
         }
