@@ -162,8 +162,6 @@ class FileCollection implements CollectionInterface
                     $collection->set($key, $values["value"]);
                 }
             }
-        } else {
-            file_put_contents($this->fileName);
         }
 
         $this->fileContents = $collection;
