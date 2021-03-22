@@ -50,7 +50,7 @@ class FileCollectionTest extends TestCase
     public function inexistentIndexShouldReturnDefaultValue()
     {
         $fileCollection = new FileCollection();
-
+        $fileCollection->clean();
         $this->assertNull($fileCollection->get('index1'));
         $this->assertEquals('defaultValue', $fileCollection->get('index1', 'defaultValue'));
     }
@@ -62,6 +62,7 @@ class FileCollectionTest extends TestCase
     public function newCollectionShouldNotContainItems()
     {
         $fileCollection = new FileCollection();
+        $fileCollection->clean();
         $this->assertEquals(0, $fileCollection->count());
     }
 
@@ -72,6 +73,7 @@ class FileCollectionTest extends TestCase
     public function collectionWithItemsShouldReturnValidCount()
     {
         $fileCollection = new FileCollection();
+        $fileCollection->clean();
         $fileCollection->set('index1', 'value');
         $fileCollection->set('index2', 5);
         $fileCollection->set('index3', true);
@@ -86,6 +88,7 @@ class FileCollectionTest extends TestCase
     public function collectionCanBeCleaned()
     {
         $fileCollection = new FileCollection();
+        $fileCollection->clean();
         $fileCollection->set('index', 'value');
         $this->assertEquals(1, $fileCollection->count());
 

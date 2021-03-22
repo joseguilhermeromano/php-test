@@ -118,8 +118,45 @@ class MemoryCollectionTest extends TestCase
 
         $array = $collection->getAll();
 
-        $this->assertEquals($array['index1'], 'value');
-        $this->assertEquals($array['index2'], 5);
-        $this->assertEquals($array['index3'], true);
+        $this->assertEquals($array['index1']['value'], 'value');
+        $this->assertEquals($array['index2']['value'], 5);
+        $this->assertEquals($array['index3']['value'], true);
+    }
+
+    /**
+     * @test
+     * @depends objectCanBeConstructed
+     */
+    public function isExpiredTimeCanBeReturnTrue()
+    {
+        $collection = new MemoryCollection();
+        sleep(10);
+        $return = $collection->isExpiredTime(5);
+        $this->assertTrue($return);
+    }
+
+    /**
+     * @test
+     * @depends objectCanBeConstructed
+     */
+    public function isExpiredTimeCanBeReturnFalse()
+    {
+        $collection = new MemoryCollection();
+        sleep(5);
+        $return = $collection->isExpiredTime(10);
+        $this->assertFalse($return);
+    }
+
+    /**
+     * @test
+     * @depends objectCanBeConstructed
+     */
+    public function expiredIndexShouldReturnNull()
+    {
+        $collection = new MemoryCollection();
+        $collection->set('index1', 'value', 5);
+        sleep(10);
+        $return = $collection->get('index1');
+        $this->assertNull($return);
     }
 }

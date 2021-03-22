@@ -79,20 +79,17 @@ class FileCollection implements CollectionInterface
      */
     public function get(string $index, $defaultValue = null)
     {
-        if (empty($this->fileContents)) {
-            $this->setFileContents();
-        }
-
         return $this->fileContents->get($index, $defaultValue);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function set(string $index, $value)
+    public function set(string $index, $value, $expirationTime = 0)
     {
-        $this->fileContents->set($index, $value);
+        $this->fileContents->set($index, $value, $expirationTime);
         $collection = $this->fileContents->getAll();
+
         $json = json_encode($collection, JSON_PRETTY_PRINT);
 
         if (!$this->isJsonValid($json)) {
@@ -176,23 +173,11 @@ class FileCollection implements CollectionInterface
 
             $content = json_decode($content, true);
 
-            foreach ($content as $key => $value) {
-                $collection->set($key, $value);
+            foreach ($content as $key => $values) {
+                $collection->set($key, $values["value"]);
             }
         }
 
         $this->fileContents = $collection;
-    }
-
-    /**
-     * Destruct file data.json
-     *
-     * @return void
-     */
-    public function __destruct()
-    {
-        if (file_exists($this->fileName)) {
-            unlink($this->fileName);
-        }
     }
 }
