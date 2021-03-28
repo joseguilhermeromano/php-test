@@ -46,8 +46,6 @@ interface CollectionInterface
     /**
      * Cleans the collection
      *
-     * Estou aqui para testar sua atenção. Remova-me.
-     *
      * @return void
      */
     public function clean();
